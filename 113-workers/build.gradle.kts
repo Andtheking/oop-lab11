@@ -1,11 +1,8 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     java
-    application
     id("org.danilopianini.gradle-java-qa") version "1.159.0"
-}
-
-tasks.javadoc {
-    isFailOnError = false
 }
 
 repositories {
@@ -21,18 +18,16 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-val mainClass: String by project
-
-application {
-    // The following allows to run with: ./gradlew -PmainClass=it.unibo.oop.MyMainClass run
-    mainClass.set(project.properties["mainClass"].toString())
-}
-
-val test by tasks.getting(Test::class) {
+tasks.withType<Test>().configureEach {
     // Use junit platform for unit tests
     useJUnitPlatform()
     testLogging {
-        events(*(org.gradle.api.tasks.testing.logging.TestLogEvent.values())) // events("passed", "skipped", "failed")
+        events(*(TestLogEvent.entries.toTypedArray())) // events("passed", "skipped", "failed")
     }
     testLogging.showStandardStreams = true
 }
+
+tasks.withType<Javadoc>().configureEach {
+    isFailOnError = false
+}
+

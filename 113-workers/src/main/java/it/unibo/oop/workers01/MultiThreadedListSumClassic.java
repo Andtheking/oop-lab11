@@ -12,6 +12,8 @@ public final class MultiThreadedListSumClassic implements SumList {
     private final int nthread;
 
     /**
+     * Builds a multithreaded list sum.
+     *
      * @param nthread
      *            no. of thread performing the sum.
      */
@@ -79,9 +81,9 @@ public final class MultiThreadedListSumClassic implements SumList {
         }
 
         @Override
-        @SuppressWarnings("PMD.SystemPrintln")
         public synchronized void run() {
-            System.out.println("Working from position " + startpos + " to position " + (startpos + nelem - 1));
+            // Println used to show the working ranges for debugging purposes
+            System.out.println("Working from position " + startpos + " to position " + (startpos + nelem - 1)); // NOPMD
             for (int i = startpos; i < list.size() && i < startpos + nelem; i++) {
                 this.res += this.list.get(i);
             }

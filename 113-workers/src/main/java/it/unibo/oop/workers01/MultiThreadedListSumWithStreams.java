@@ -13,6 +13,8 @@ public final class MultiThreadedListSumWithStreams implements SumList {
     private final int nthread;
 
     /**
+     * Builds a multithreaded list sum using streams.
+     *
      * @param nthread
      *            no. of thread performing the sum.
      */
@@ -26,17 +28,16 @@ public final class MultiThreadedListSumWithStreams implements SumList {
         /*
          * Build a stream of workers
          */
-        return IntStream
-                .iterate(0, start -> start + size)
-                .limit(nthread)
-                .mapToObj(start -> new Worker(list, start, size))
-                // Start them
-                .peek(Thread::start)
-                // Join them
-                .peek(MultiThreadedListSumWithStreams::joinUninterruptibly)
-                // Get their result and sum
-                .mapToLong(Worker::getResult)
-                .sum();
+        return IntStream.iterate(0, start -> start + size)
+            .limit(nthread)
+            .mapToObj(start -> new Worker(list, start, size))
+            // Start them
+            .peek(Thread::start)
+            // Join them
+            .peek(MultiThreadedListSumWithStreams::joinUninterruptibly)
+            // Get their result and sum
+            .mapToLong(Worker::getResult)
+            .sum();
     }
 
     @SuppressWarnings("PMD.AvoidPrintStackTrace")

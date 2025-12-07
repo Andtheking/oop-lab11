@@ -1,15 +1,18 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     java
     application
     id("org.danilopianini.gradle-java-qa") version "1.159.0"
 }
 
-tasks.javadoc {
-    isFailOnError = false
-}
-
 repositories {
     mavenCentral()
+}
+
+application  {
+    // Define the main class for the application.
+    mainClass.set("it.unibo.oop.lab.streams.LambdaFilter")
 }
 
 dependencies {
@@ -21,19 +24,15 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-val mainClass: String by project
-
-application {
-    val main: String? by project
-    // The following allows to run with: ./gradlew -Pmain=it.unibo.oop.MyMainClass run
-    this.mainClass = main ?: "it.unibo.oop.lab.streams.LambdaFilter"
-}
-
-val test by tasks.getting(Test::class) {
+tasks.withType<Test>().configureEach {
     // Use junit platform for unit tests
     useJUnitPlatform()
     testLogging {
-        events(*(org.gradle.api.tasks.testing.logging.TestLogEvent.values())) // events("passed", "skipped", "failed")
+        events(*(TestLogEvent.entries.toTypedArray())) // events("passed", "skipped", "failed")
     }
     testLogging.showStandardStreams = true
+}
+
+tasks.withType<Javadoc>().configureEach {
+    isFailOnError = false
 }

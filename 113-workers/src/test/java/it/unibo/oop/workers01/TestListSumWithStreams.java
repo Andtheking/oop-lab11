@@ -29,15 +29,8 @@ class TestListSumWithStreams {
      */
     @Test
     void testBasic() {
-        final List<Integer> list = IntStream
-                .iterate(0, i -> i + 1)
-                .limit(SIZE)
-                .boxed()
-                .collect(Collectors.toList());
-        final long sum = list
-                .stream()
-                .mapToLong(Integer::longValue)
-                .sum();
+        final List<Integer> list = IntStream.iterate(0, i -> i + 1).limit(SIZE).boxed().collect(Collectors.toList());
+        final long sum = list.stream().mapToLong(Integer::longValue).sum();
         System.out.println("BTW: the sum with " + SIZE + " elements is: " + sum);
         /*
          * Prepare time ant test with different number of threads
@@ -47,8 +40,9 @@ class TestListSumWithStreams {
             final SumList sumList = new MultiThreadedListSumWithStreams(threads);
             time = System.currentTimeMillis();
             assertEquals(sum, sumList.sum(list));
-            System.out.println("Tried with " + threads + " thread: "
-                    + (System.currentTimeMillis() - time) + MSEC);
+            System.out.println(
+                "Tried with " + threads + " thread: " + (System.currentTimeMillis() - time) + MSEC
+            );
         }
     }
 

@@ -9,6 +9,8 @@ import java.util.List;
 public interface SumList {
 
     /**
+     * Sums up all elements in the given list.
+     *
      * @param list
      *            an arbitrary-sized list of integers
      * @return the sum of its elements
